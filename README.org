@@ -1,0 +1,40 @@
+* IDAPython remote connection for Emacs
+  This repository contains a quick-n-dirty implementation of a
+  python-interpreter server and Emacs comint-mode client. I build it
+  specifically to interact with the python interpreter inside IDA
+  Pro. It enables me to write code in Emacs and execute it (more or
+  less) directly within the context of the IDA python
+  interpreter. Although there are still some issues, it speeds up the
+  development process significantly.
+
+  I do not plan to include any new features, but feel free to extend
+  it.
+* Installation
+  Place the idapython-mode.el file somewhere in the search path of
+  Emacs and load it using =(require 'idapython-mode)= in your .emacs
+  file.
+* Usage
+  Start IDA Pro and load the server.py script. This can be done in one
+  line =idaq -S</absolute/path/server.py> <executable>=.
+
+  From Emacs, type =M-x run-idapython= and type =M-x idapython-mode=
+  inside some python buffer. The last step, loading idapython-mode in
+  a python buffer, is necessary to overload some keybindings for
+  sending python code to the right interpreter. It should only be
+  activated for buffers where you edit python code for IDA. Therefore,
+  I left this a manual step.
+
+  Once the *IDAPython* buffer is connected to IDA, you can send
+  regions of code using =C-c C-r= or the entire file using =C-c C-c=.
+* Bugs
+  Indented blocks in regions are not interpreted correctly on the
+  server side. This is an issue in the server code, but was not urgent
+  enough for me to fix.
+
+  When using =C-c C-c=, Emacs actually sends a command to load the
+  file, not the buffer. Therefore, your script should be saved before
+  using =C-c C-c=.
+
+  Currently, the server only accepts a single connection and exits
+  after the interactive session is closed. For a new session, just
+  restart the server.
